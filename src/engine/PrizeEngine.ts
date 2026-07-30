@@ -1,5 +1,5 @@
 import type { EventConfig, GameOutcomeType, InventoryState, PacingState, PlayHistoryEntry, PrizeTier } from '../types/engine';
-import { NEAR_MISS_PROBABILITY, PRIZE_IMAGES } from '../constants/prizes';
+import { ALL_REEL_IMAGES, NEAR_MISS_PROBABILITY, PRIZE_IMAGES } from '../constants/prizes';
 import { InventoryManager } from './InventoryManager';
 import { StorageManager } from './StorageManager';
 
@@ -168,18 +168,20 @@ export class PrizeEngine {
     let reelsOutcome: [string, string, string];
 
     if (isNearMiss) {
+      // 2 Grand symbols + 1 non-grand symbol from the official 7 images
       const grandImage = PRIZE_IMAGES.big[0];
-      const otherPool = [...PRIZE_IMAGES.small, ...PRIZE_IMAGES.lose];
-      const nonMatchingImage = otherPool[Math.floor(Math.random() * otherPool.length)];
+      const nonGrandPool = [...PRIZE_IMAGES.small, ...PRIZE_IMAGES.medium];
+      const nonMatchingImage = nonGrandPool[Math.floor(Math.random() * nonGrandPool.length)];
       reelsOutcome = [grandImage, grandImage, nonMatchingImage];
     } else {
-      const allPool = [...PRIZE_IMAGES.small, ...PRIZE_IMAGES.medium, ...PRIZE_IMAGES.lose];
-      const sym1 = allPool[Math.floor(Math.random() * allPool.length)];
-      let sym2 = allPool[Math.floor(Math.random() * allPool.length)];
-      let sym3 = allPool[Math.floor(Math.random() * allPool.length)];
+      // 3 non-matching symbols strictly chosen from ALL_REEL_IMAGES (the 7 real images)
+      const sym1 = ALL_REEL_IMAGES[Math.floor(Math.random() * ALL_REEL_IMAGES.length)];
+      let sym2 = ALL_REEL_IMAGES[Math.floor(Math.random() * ALL_REEL_IMAGES.length)];
+      let sym3 = ALL_REEL_IMAGES[Math.floor(Math.random() * ALL_REEL_IMAGES.length)];
 
+      // Ensure sym1, sym2, sym3 do not all match
       while (sym1 === sym2 && sym2 === sym3) {
-        sym3 = allPool[Math.floor(Math.random() * allPool.length)];
+        sym3 = ALL_REEL_IMAGES[Math.floor(Math.random() * ALL_REEL_IMAGES.length)];
       }
       reelsOutcome = [sym1, sym2, sym3];
     }

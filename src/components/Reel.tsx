@@ -5,11 +5,11 @@ interface ReelProps {
   id: number;
   targetImage: string | null;
   isSpinning: boolean;
-  stopTriggered: boolean; // parent triggers the stop phase
-  onStop: () => void; // callback when this reel stops
+  stopTriggered: boolean;
+  onStop: () => void;
 }
 
-const REPEATS = 25; // Repeat images list to create a long track
+const REPEATS = 25;
 
 export const Reel: React.FC<ReelProps> = ({
   id,
@@ -22,10 +22,8 @@ export const Reel: React.FC<ReelProps> = ({
   const trackRef = useRef<HTMLDivElement>(null);
   const [stopFlash, setStopFlash] = useState(false);
 
-  // Dynamic item height — matches the container's actual rendered height
   const [itemHeight, setItemHeight] = useState(200);
 
-  // Observe container size changes (responsive resize)
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -36,12 +34,10 @@ export const Reel: React.FC<ReelProps> = ({
       }
     });
     obs.observe(el);
-    // Set initial value
     setItemHeight(el.getBoundingClientRect().height || 200);
     return () => obs.disconnect();
   }, []);
 
-  // Create a randomized pool of images for the reel strip
   const [reelList] = useState<string[]>(() => {
     const list: string[] = [];
     for (let i = 0; i < REPEATS; i++) {
@@ -51,7 +47,6 @@ export const Reel: React.FC<ReelProps> = ({
     return list;
   });
 
-  // Track animation state with refs to prevent React render lag
   const stateRef = useRef({
     y: 0,
     vy: 0,
@@ -60,8 +55,6 @@ export const Reel: React.FC<ReelProps> = ({
     onStopCalled: false,
   });
 
-  // Helper to determine minimum pixel distance needed for deceleration
-  // DEFINED FIRST — used in the stop useEffect below
   const maxSpinDurationPx = useCallback(() => {
     const baseSpeed = 38 + id * 5;
     return baseSpeed * 25;
@@ -70,7 +63,6 @@ export const Reel: React.FC<ReelProps> = ({
   useEffect(() => {
     let animationFrameId: number;
 
-    // Physics constants
     const maxSpeed = 38 + id * 5;
     const acceleration = 1.2;
     const springK = 0.08;
@@ -113,14 +105,12 @@ export const Reel: React.FC<ReelProps> = ({
           if (!state.onStopCalled) {
             state.onStopCalled = true;
             onStop();
-            // Trigger stop flash effect
             setStopFlash(true);
             setTimeout(() => setStopFlash(false), 120);
           }
         }
       }
 
-      // Apply transformation — direct DOM manipulation for blur (no state re-render)
       track.style.transform = `translateY(-${state.y}px)`;
       const currentBlur = Math.min(12, Math.abs(state.vy) * 0.35);
       track.style.filter = currentBlur > 0.5 ? `blur(${currentBlur}px)` : 'none';
@@ -135,7 +125,6 @@ export const Reel: React.FC<ReelProps> = ({
     };
   }, [reelList, id, onStop, itemHeight]);
 
-  // Handle spin triggers from parent
   useEffect(() => {
     const state = stateRef.current;
     if (isSpinning && state.phase === 'idle') {
@@ -145,7 +134,6 @@ export const Reel: React.FC<ReelProps> = ({
     }
   }, [isSpinning]);
 
-  // Handle stop triggers from parent
   useEffect(() => {
     const state = stateRef.current;
 
@@ -175,7 +163,6 @@ export const Reel: React.FC<ReelProps> = ({
     }
   }, [stopTriggered, targetImage, reelList, maxSpinDurationPx, itemHeight]);
 
-  // Reset state to idle if not spinning
   useEffect(() => {
     if (!isSpinning && !stopTriggered) {
       const state = stateRef.current;
@@ -190,13 +177,10 @@ export const Reel: React.FC<ReelProps> = ({
       ref={containerRef}
       className="relative w-full h-[155px] sm:h-[185px] md:h-[220px] bg-[#0f0506] rounded-xl sm:rounded-2xl border-2 border-yellow-500/50 overflow-hidden flex items-center justify-center reels-glass-overlay shadow-[inset_0_16px_32px_rgba(0,0,0,0.98),inset_0_-16px_32px_rgba(0,0,0,0.98),0_6px_16px_rgba(0,0,0,0.8)]"
     >
-      {/* Stop Flash Overlay — brief white burst when reel locks */}
       {stopFlash && (
-        <div className="absolute inset-0 bg-white/70 z-30 pointer-events-none rounded-2xl" style={{ animation: 'none' }} />
+        <div className="absolute inset-0 bg-white/70 z-30 pointer-events-none rounded-2xl" />
       )}
 
-
-      {/* Reel Track container */}
       <div
         ref={trackRef}
         className="absolute top-0 flex flex-col w-full"
@@ -216,38 +200,11 @@ export const Reel: React.FC<ReelProps> = ({
               alt="Slot Symbol"
               className="w-full h-full object-contain filter drop-shadow-[0_5px_10px_rgba(0,0,0,0.6)] transform scale-[0.95]"
               draggable="false"
-              onError={(e) => {
-                const target = e.target as HTMLElement;
-                target.style.display = 'none';
-                const parent = target.parentElement;
-                if (parent) {
-                  let placeholderText = '❓';
-                  let bgColor = 'bg-gray-800';
-                  if (imagePath.includes('small')) {
-                    placeholderText = '🟢 Chico';
-                    bgColor = 'bg-green-950 border border-green-500/30';
-                  } else if (imagePath.includes('medium')) {
-                    placeholderText = '🔵 Mediano';
-                    bgColor = 'bg-blue-950 border border-blue-500/30';
-                  } else if (imagePath.includes('grand')) {
-                    placeholderText = '👑 GRANDE';
-                    bgColor = 'bg-yellow-950 border border-yellow-500/40';
-                  }
-                  const isExisting = parent.querySelector('.placeholder-card');
-                  if (!isExisting) {
-                    const fallbackEl = document.createElement('div');
-                    fallbackEl.className = `placeholder-card w-[150px] h-[150px] ${bgColor} rounded-xl flex items-center justify-center font-bold text-center text-sm p-2 text-white shadow-lg`;
-                    fallbackEl.innerHTML = `<span>${placeholderText}</span>`;
-                    parent.appendChild(fallbackEl);
-                  }
-                }
-              }}
             />
           </div>
         ))}
       </div>
 
-      {/* Curved Cylindrical Glass Shading Overlays */}
       <div className="absolute inset-x-0 top-0 h-[50px] bg-gradient-to-b from-black/95 via-black/60 to-transparent pointer-events-none z-10" />
       <div className="absolute inset-x-0 bottom-0 h-[50px] bg-gradient-to-t from-black/95 via-black/60 to-transparent pointer-events-none z-10" />
       <div className="absolute inset-y-0 left-0 w-[12px] bg-gradient-to-r from-black/40 to-transparent pointer-events-none z-10" />

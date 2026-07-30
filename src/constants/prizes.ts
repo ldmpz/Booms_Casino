@@ -57,6 +57,7 @@ export const PRIZE_TIERS: Record<PrizeTier, PrizeConfig> = {
   },
 };
 
+// Strictly use ONLY the 7 official images provided in /images/prizes/
 export const PRIZE_IMAGES = {
   small: [
     '/images/prizes/small1.png',
@@ -71,17 +72,13 @@ export const PRIZE_IMAGES = {
   big: [
     '/images/prizes/grand.png',
   ],
-  lose: [
-    '/images/prizes/lose1.png',
-    '/images/prizes/lose2.png',
-  ],
 };
 
+// All 7 official reel images
 export const ALL_REEL_IMAGES = [
   ...PRIZE_IMAGES.small,
   ...PRIZE_IMAGES.medium,
   ...PRIZE_IMAGES.big,
-  ...PRIZE_IMAGES.lose,
 ];
 
 export const NEAR_MISS_PROBABILITY = 0.30;
