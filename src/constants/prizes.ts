@@ -1,17 +1,8 @@
 import type { EventConfig, InventoryState, PrizeConfig, PrizeTier } from '../types/engine';
 
-import small1 from '../assets/images/prizes/small1.png';
-import small2 from '../assets/images/prizes/small2.png';
-import small3 from '../assets/images/prizes/small3.png';
-import medium1 from '../assets/images/prizes/medium1.png';
-import medium2 from '../assets/images/prizes/medium2.png';
-import medium3 from '../assets/images/prizes/medium3.png';
-import grand from '../assets/images/prizes/grand.png';
-import casinoBg from '../assets/images/casino_bg.png';
-
 export type { PrizeTier, PrizeConfig, InventoryState, EventConfig };
 
-export const CASINO_BG_IMAGE = casinoBg;
+export const CASINO_BG_IMAGE = '/images/casino_bg.png';
 
 export const DEFAULT_INVENTORY: InventoryState = {
   small: 500,
@@ -68,11 +59,11 @@ export const PRIZE_TIERS: Record<PrizeTier, PrizeConfig> = {
   },
 };
 
-// Strictly use ONLY the 7 official images imported as Vite asset modules
+// Official 7 prize images stored in public/images/
 export const PRIZE_IMAGES = {
-  small: [small1, small2, small3],
-  medium: [medium1, medium2, medium3],
-  big: [grand],
+  small: ['/images/prizes/small1.png', '/images/prizes/small2.png', '/images/prizes/small3.png'],
+  medium: ['/images/prizes/medium1.png', '/images/prizes/medium2.png', '/images/prizes/medium3.png'],
+  big: ['/images/prizes/grand.png'],
 };
 
 // All 7 official reel images
