@@ -1,60 +1,62 @@
-export type PrizeTier = 'small' | 'medium' | 'big';
+import type { EventConfig, InventoryState, PrizeConfig, PrizeTier } from '../types/engine';
 
-export interface PrizeConfig {
-  id: string;
-  name: string;
-  tier: PrizeTier;
-  glowColor: string; // Tailwind class like shadow-green-500, glow-green
-  textColor: string; // Tailwind class
-  bannerText: string;
-  subText: string;
-}
+export type { PrizeTier, PrizeConfig, InventoryState, EventConfig };
 
-export const PRIZE_TIERS: Record<PrizeTier, PrizeConfig> = {
-  small: {
-    id: 'small',
-    name: 'Premio Chico',
-    tier: 'small',
-    glowColor: 'rgba(74, 222, 128, 0.8)', // Green glow
-    textColor: 'text-green-400 text-glow-green',
-    bannerText: '¡Felicidades!',
-    subText: 'Ganaste un Premio Chico',
-  },
-  medium: {
-    id: 'medium',
-    name: 'Premio Mediano',
-    tier: 'medium',
-    glowColor: 'rgba(96, 165, 250, 0.8)', // Blue glow
-    textColor: 'text-blue-400 text-glow-blue',
-    bannerText: '¡Excelente!',
-    subText: 'Ganaste un Premio Mediano',
-  },
-  big: {
-    id: 'big',
-    name: 'Premio Grande',
-    tier: 'big',
-    glowColor: 'rgba(250, 204, 21, 0.9)', // Golden glow
-    textColor: 'text-yellow-400 text-glow-gold font-extrabold',
-    bannerText: '¡¡¡PREMIO GRANDE!!!',
-    subText: '¡Te llevas el premio mayor!',
-  },
+export const DEFAULT_INVENTORY: InventoryState = {
+  small: 500,
+  medium: 100,
+  big: 4,
 };
 
-// Default probabilities (must add up to 100 or be proportional)
 export const DEFAULT_PRIZE_WEIGHTS = {
   small: 80,
   medium: 19,
   big: 1,
 };
 
-// Default inventory amounts
-export const DEFAULT_INVENTORY = {
-  small: 300,
-  medium: 100,
-  big: 5,
+export const DEFAULT_EVENT_CONFIG: EventConfig = {
+  eventName: 'BOOMS LAB Expo 2026',
+  expectedParticipants: 5000,
+  durationDays: 2,
+  hoursPerDay: 8,
+  initialInventory: { ...DEFAULT_INVENTORY },
+  minBigPrizeGap: 400,
+  bigPrizeLocked: false,
+  deliveryLevel: 'NORMAL',
+  deliveryPaused: false,
+  adminPin: '2026',
 };
 
-// Image mappings. These files will be served from the public folder.
+export const PRIZE_TIERS: Record<PrizeTier, PrizeConfig> = {
+  small: {
+    id: 'small',
+    name: 'Premio Chico',
+    tier: 'small',
+    glowColor: 'rgba(74, 222, 128, 0.8)',
+    textColor: 'text-green-400 text-glow-green',
+    bannerText: '¡Felicidades!',
+    subText: '¡Te has ganado un Premio Chico!',
+  },
+  medium: {
+    id: 'medium',
+    name: 'Premio Mediano',
+    tier: 'medium',
+    glowColor: 'rgba(96, 165, 250, 0.8)',
+    textColor: 'text-blue-400 text-glow-blue',
+    bannerText: '¡Excelente Jugada!',
+    subText: '¡Te llevas un Premio Mediano!',
+  },
+  big: {
+    id: 'big',
+    name: 'Premio Grande',
+    tier: 'big',
+    glowColor: 'rgba(250, 204, 21, 0.9)',
+    textColor: 'text-yellow-400 text-glow-gold font-extrabold',
+    bannerText: '¡¡¡GRAN JACKPOT BOOMS LAB!!!',
+    subText: '¡¡TE LLEVAS EL PREMIO MAYOR!!',
+  },
+};
+
 export const PRIZE_IMAGES = {
   small: [
     '/images/prizes/small1.png',
@@ -69,14 +71,17 @@ export const PRIZE_IMAGES = {
   big: [
     '/images/prizes/grand.png',
   ],
+  lose: [
+    '/images/prizes/lose1.png',
+    '/images/prizes/lose2.png',
+  ],
 };
 
-// All available images listed together for reel spinning decoration
 export const ALL_REEL_IMAGES = [
   ...PRIZE_IMAGES.small,
   ...PRIZE_IMAGES.medium,
   ...PRIZE_IMAGES.big,
+  ...PRIZE_IMAGES.lose,
 ];
 
-// Near miss (casi-ganador) probability when spinning a non-jackpot
-export const NEAR_MISS_PROBABILITY = 0.25; // 25% chance of near-miss
+export const NEAR_MISS_PROBABILITY = 0.30;
