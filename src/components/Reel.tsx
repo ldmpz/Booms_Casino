@@ -9,7 +9,6 @@ interface ReelProps {
   onStop: () => void; // callback when this reel stops
 }
 
-const ITEM_HEIGHT = 200; // Height of each image item in pixels
 const REPEATS = 25; // Repeat images list to create a long track
 
 export const Reel: React.FC<ReelProps> = ({
@@ -22,6 +21,25 @@ export const Reel: React.FC<ReelProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [stopFlash, setStopFlash] = useState(false);
+
+  // Dynamic item height — matches the container's actual rendered height
+  const [itemHeight, setItemHeight] = useState(200);
+
+  // Observe container size changes (responsive resize)
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const obs = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const h = Math.round(entry.contentRect.height);
+        if (h > 0) setItemHeight(h);
+      }
+    });
+    obs.observe(el);
+    // Set initial value
+    setItemHeight(el.getBoundingClientRect().height || 200);
+    return () => obs.disconnect();
+  }, []);
 
   // Create a randomized pool of images for the reel strip
   const [reelList] = useState<string[]>(() => {
@@ -61,6 +79,7 @@ export const Reel: React.FC<ReelProps> = ({
     const updatePhysics = () => {
       const state = stateRef.current;
       const track = trackRef.current;
+      const ITEM_H = itemHeight;
 
       if (!track) {
         animationFrameId = requestAnimationFrame(updatePhysics);
@@ -73,7 +92,7 @@ export const Reel: React.FC<ReelProps> = ({
         }
         state.y += state.vy;
 
-        const maxTrackHeight = reelList.length * ITEM_HEIGHT - ITEM_HEIGHT;
+        const maxTrackHeight = reelList.length * ITEM_H - ITEM_H;
         if (state.y >= maxTrackHeight) {
           state.y = state.y % maxTrackHeight;
         }
@@ -114,7 +133,7 @@ export const Reel: React.FC<ReelProps> = ({
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [reelList, id, onStop]);
+  }, [reelList, id, onStop, itemHeight]);
 
   // Handle spin triggers from parent
   useEffect(() => {
@@ -131,8 +150,8 @@ export const Reel: React.FC<ReelProps> = ({
     const state = stateRef.current;
 
     if (stopTriggered && state.phase === 'spinning' && targetImage) {
-      const currentIdx = Math.floor(state.y / ITEM_HEIGHT);
-      const minLandingIdx = currentIdx + Math.floor(maxSpinDurationPx() / ITEM_HEIGHT);
+      const currentIdx = Math.floor(state.y / itemHeight);
+      const minLandingIdx = currentIdx + Math.floor(maxSpinDurationPx() / itemHeight);
 
       let landingIdx = -1;
       for (let i = minLandingIdx; i < reelList.length; i++) {
@@ -151,10 +170,10 @@ export const Reel: React.FC<ReelProps> = ({
         }
       }
 
-      state.targetY = landingIdx * ITEM_HEIGHT;
+      state.targetY = landingIdx * itemHeight;
       state.phase = 'stopping';
     }
-  }, [stopTriggered, targetImage, reelList, maxSpinDurationPx]);
+  }, [stopTriggered, targetImage, reelList, maxSpinDurationPx, itemHeight]);
 
   // Reset state to idle if not spinning
   useEffect(() => {
@@ -182,15 +201,15 @@ export const Reel: React.FC<ReelProps> = ({
         ref={trackRef}
         className="absolute top-0 flex flex-col w-full"
         style={{
-          height: `${reelList.length * ITEM_HEIGHT}px`,
+          height: `${reelList.length * itemHeight}px`,
           willChange: 'transform',
         }}
       >
         {reelList.map((imagePath, index) => (
           <div
             key={`${index}-${imagePath}`}
-            className="w-full flex items-center justify-center p-4 select-none pointer-events-none bg-gradient-to-r from-amber-50/95 via-white to-amber-50/95 border-x border-yellow-600/30"
-            style={{ height: `${ITEM_HEIGHT}px` }}
+            className="w-full flex items-center justify-center select-none pointer-events-none bg-gradient-to-r from-amber-50/95 via-white to-amber-50/95 border-x border-yellow-600/30"
+            style={{ height: `${itemHeight}px`, padding: `${Math.round(itemHeight * 0.07)}px` }}
           >
             <img
               src={imagePath}
