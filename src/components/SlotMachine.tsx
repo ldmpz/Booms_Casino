@@ -108,7 +108,7 @@ export const SlotMachine: React.FC = () => {
   const [countdownValue, setCountdownValue] = useState<number | null>(null);
 
   // Prizes delivered ticker
-  const [deliveredCounts, setDeliveredCounts] = useState(getPrizesDelivered());
+  const [, setDeliveredCounts] = useState(getPrizesDelivered());
 
   // Admin panel state
   const [isAdminOpen, setIsAdminOpen] = useState(false);
