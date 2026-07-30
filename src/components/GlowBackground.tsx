@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { CASINO_BG_IMAGE } from '../constants/prizes';
 
 export type GlowState = 'idle' | 'spinning' | 'small' | 'medium' | 'big';
 
@@ -31,7 +32,7 @@ export const GlowBackground: React.FC<GlowBackgroundProps> = ({ state }) => {
       <div 
         className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat scale-105 pointer-events-none filter blur-[4px] brightness-[0.45] saturate-[1.4]"
         style={{
-          backgroundImage: `url('/images/casino_bg.png')`,
+          backgroundImage: `url(${CASINO_BG_IMAGE})`,
         }}
       />
 
