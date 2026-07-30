@@ -320,7 +320,7 @@ export const SlotMachine: React.FC = () => {
             <motion.div
               animate={{ y: [0, -10, 0], scale: [1, 1.05, 1] }}
               transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
-              className="relative font-anton text-2xl sm:text-4xl md:text-6xl text-red-500 text-center tracking-widest uppercase px-4 sm:px-8 md:px-12 py-3 sm:py-6 md:py-8 rounded-2xl sm:rounded-3xl backdrop-blur-md flex flex-col items-center gap-2 sm:gap-3"
+              className="relative max-w-[78vw] sm:max-w-md md:max-w-xl font-anton text-lg sm:text-3xl md:text-5xl text-red-500 text-center tracking-widest uppercase px-3 sm:px-6 md:px-10 py-2.5 sm:py-5 md:py-7 rounded-2xl sm:rounded-3xl backdrop-blur-md flex flex-col items-center gap-1.5 sm:gap-3"
               style={{
                 background: 'radial-gradient(circle at 50% 50%, rgba(45, 6, 8, 0.96) 0%, rgba(10, 1, 2, 0.98) 100%)',
                 border: '3px solid #ef4444',
