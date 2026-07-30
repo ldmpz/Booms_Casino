@@ -169,7 +169,7 @@ export const Reel: React.FC<ReelProps> = ({
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[220px] bg-[#0f0506] rounded-2xl border-2 border-yellow-500/50 overflow-hidden flex items-center justify-center reels-glass-overlay shadow-[inset_0_16px_32px_rgba(0,0,0,0.98),inset_0_-16px_32px_rgba(0,0,0,0.98),0_6px_16px_rgba(0,0,0,0.8)]"
+      className="relative w-full h-[155px] sm:h-[185px] md:h-[220px] bg-[#0f0506] rounded-xl sm:rounded-2xl border-2 border-yellow-500/50 overflow-hidden flex items-center justify-center reels-glass-overlay shadow-[inset_0_16px_32px_rgba(0,0,0,0.98),inset_0_-16px_32px_rgba(0,0,0,0.98),0_6px_16px_rgba(0,0,0,0.8)]"
     >
       {/* Stop Flash Overlay — brief white burst when reel locks */}
       {stopFlash && (

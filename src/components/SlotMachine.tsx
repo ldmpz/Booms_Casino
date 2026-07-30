@@ -245,7 +245,7 @@ export const SlotMachine: React.FC = () => {
 
   return (
     <div
-      className={`relative min-h-screen w-full flex flex-col items-center justify-between p-4 md:p-6 select-none overflow-hidden transition-transform duration-100 ${isShaking ? 'animate-shake' : ''}`}
+      className={`relative min-h-[100dvh] w-full flex flex-col items-center justify-between p-2 sm:p-4 md:p-6 select-none overflow-x-hidden transition-transform duration-100 ${isShaking ? 'animate-shake' : ''}`}
       onClick={resetAttractTimer}
     >
       {/* Dynamic Casino Background */}
@@ -259,13 +259,13 @@ export const SlotMachine: React.FC = () => {
             initial={{ opacity: 1 }}
             animate={{ opacity: 0 }}
             transition={{ duration: 1.8, ease: 'easeOut' }}
-            className="absolute inset-0 bg-black z-[100] pointer-events-none flex items-center justify-center"
+            className="absolute inset-0 bg-black z-[100] pointer-events-none flex items-center justify-center p-4"
           >
             <motion.div
               initial={{ scale: 0.7, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2, duration: 0.6, type: 'spring' }}
-              className="font-anton text-6xl md:text-8xl text-white tracking-[0.15em] text-center"
+              className="font-anton text-4xl sm:text-6xl md:text-8xl text-white tracking-[0.15em] text-center"
               style={{ textShadow: '0 4px 0 #C40018, 0 8px 30px rgba(196,0,24,0.8)' }}
             >
               BOOMS<span className="text-yellow-400">LAB</span>
@@ -315,23 +315,23 @@ export const SlotMachine: React.FC = () => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.85 }}
             transition={{ duration: 0.4 }}
-            className="absolute inset-0 z-[80] flex items-center justify-center pointer-events-none p-4"
+            className="absolute inset-0 z-[80] flex items-center justify-center pointer-events-none p-2 sm:p-4"
           >
             <motion.div
               animate={{ y: [0, -10, 0], scale: [1, 1.05, 1] }}
               transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
-              className="relative font-anton text-4xl md:text-6xl text-red-500 text-center tracking-widest uppercase px-8 md:px-12 py-6 md:py-8 rounded-3xl backdrop-blur-md flex flex-col items-center gap-3"
+              className="relative font-anton text-2xl sm:text-4xl md:text-6xl text-red-500 text-center tracking-widest uppercase px-4 sm:px-8 md:px-12 py-3 sm:py-6 md:py-8 rounded-2xl sm:rounded-3xl backdrop-blur-md flex flex-col items-center gap-2 sm:gap-3"
               style={{
                 background: 'radial-gradient(circle at 50% 50%, rgba(45, 6, 8, 0.96) 0%, rgba(10, 1, 2, 0.98) 100%)',
-                border: '4px solid #ef4444',
+                border: '3px solid #ef4444',
                 textShadow: '0 0 20px rgba(239,68,68,1), 0 0 40px rgba(239,68,68,0.7), 0 4px 8px rgba(0,0,0,0.9)',
                 boxShadow: '0 0 60px rgba(239,68,68,0.65), inset 0 0 30px rgba(239,68,68,0.25), 0 20px 50px rgba(0,0,0,0.9)',
               }}
             >
-              <div className="flex items-center justify-center gap-4">
-                <span className="text-4xl md:text-5xl animate-bounce">🧵</span>
+              <div className="flex items-center justify-center gap-2 sm:gap-4">
+                <span className="text-2xl sm:text-4xl md:text-5xl animate-bounce">🧵</span>
                 <span>¡JALA LA PALANCA<br />PARA JUGAR!</span>
-                <span className="text-4xl md:text-5xl animate-bounce">🪡</span>
+                <span className="text-2xl sm:text-4xl md:text-5xl animate-bounce">🪡</span>
               </div>
             </motion.div>
           </motion.div>
@@ -341,59 +341,59 @@ export const SlotMachine: React.FC = () => {
       {/* ── SETTINGS GEAR (hidden) ───────────────────────────────────── */}
       <button
         onClick={() => setIsAdminOpen(true)}
-        className="absolute top-4 left-4 p-2 rounded-full border border-white/5 bg-white/5 hover:bg-white/10 text-gray-500 hover:text-white transition-all cursor-pointer opacity-20 hover:opacity-100 z-30"
+        className="absolute top-3 left-3 p-2 rounded-full border border-white/5 bg-white/5 hover:bg-white/10 text-gray-500 hover:text-white transition-all cursor-pointer opacity-20 hover:opacity-100 z-30"
         title="Settings"
       >
         <Settings className="w-4 h-4" />
       </button>
 
       {/* ── TOP HEADER ──────────────────────────────────────────────── */}
-      <header className="relative w-full max-w-5xl flex items-center justify-between z-10 pt-2 pb-4">
+      <header className="relative w-full max-w-5xl flex items-center justify-between z-10 pt-1 sm:pt-2 pb-2 sm:pb-4 px-1">
         {/* Left: Guaranteed Prizes Badge */}
-        <div className="flex items-center gap-2.5 px-4 py-2 rounded-full border-2 border-yellow-500/60 bg-gradient-to-r from-black via-zinc-950 to-black backdrop-blur-md shadow-[0_4px_25px_rgba(0,0,0,0.8),0_0_20px_rgba(234,179,8,0.25)]">
-          <div className="p-1.5 rounded-full bg-gradient-to-tr from-amber-600 via-yellow-400 to-amber-200 shadow-md animate-pulse">
-            <Trophy className="w-4 h-4 text-black" />
+        <div className="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border-2 border-yellow-500/60 bg-gradient-to-r from-black via-zinc-950 to-black backdrop-blur-md shadow-[0_4px_25px_rgba(0,0,0,0.8),0_0_20px_rgba(234,179,8,0.25)]">
+          <div className="p-1 sm:p-1.5 rounded-full bg-gradient-to-tr from-amber-600 via-yellow-400 to-amber-200 shadow-md animate-pulse">
+            <Trophy className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-black" />
           </div>
           <div className="flex flex-col text-left">
-            <span className="text-[9px] leading-none text-yellow-300 font-black uppercase tracking-widest gold-text-glow">Premios Garantizados</span>
-            <span className="text-[11px] leading-none text-white font-extrabold uppercase tracking-wide">¡Todos Ganan!</span>
+            <span className="text-[8px] sm:text-[9px] leading-none text-yellow-300 font-black uppercase tracking-widest gold-text-glow">Premios Garantizados</span>
+            <span className="text-[9px] sm:text-[11px] leading-none text-white font-extrabold uppercase tracking-wide">¡Todos Ganan!</span>
           </div>
         </div>
 
         {/* Right: Audio Toggle */}
         <button
           onClick={toggleMute}
-          className="p-3 rounded-full border-2 border-yellow-500/60 bg-gradient-to-b from-amber-900/90 via-black to-yellow-950/90 text-yellow-400 hover:text-yellow-200 hover:border-yellow-400 transition-all cursor-pointer shadow-[0_6px_20px_rgba(0,0,0,0.8),0_0_15px_rgba(234,179,8,0.3)] active:scale-95 backdrop-blur-md"
+          className="p-2 sm:p-3 rounded-full border-2 border-yellow-500/60 bg-gradient-to-b from-amber-900/90 via-black to-yellow-950/90 text-yellow-400 hover:text-yellow-200 hover:border-yellow-400 transition-all cursor-pointer shadow-[0_6px_20px_rgba(0,0,0,0.8),0_0_15px_rgba(234,179,8,0.3)] active:scale-95 backdrop-blur-md"
           title={muted ? 'Activar sonido' : 'Silenciar'}
         >
-          {muted ? <VolumeX className="w-5 h-5 text-gray-400" /> : <Volume2 className="w-5 h-5 text-yellow-300 animate-pulse" />}
+          {muted ? <VolumeX className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" /> : <Volume2 className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-300 animate-pulse" />}
         </button>
       </header>
 
       {/* ── SLOT MACHINE CABINET ────────────────────────────────────── */}
-      <main className="relative w-full max-w-4xl flex-1 flex flex-col items-center justify-center z-10 py-4 md:py-8">
+      <main className="relative w-full max-w-4xl flex-1 flex flex-col items-center justify-center z-10 py-2 sm:py-4 md:py-8">
 
         {/* Outer Gold & Platinum 3D Chassis Border */}
-        <div className={`relative w-full p-[6px] rounded-[56px] bg-gold-metallic shadow-[0_35px_90px_rgba(0,0,0,0.98),0_0_60px_rgba(234,179,8,0.35)] transition-all duration-300 ${isAttract ? 'shadow-[0_0_90px_rgba(250,204,21,0.6),0_35px_90px_rgba(0,0,0,0.98)]' : ''}`}>
+        <div className={`relative w-full p-1 sm:p-1.5 md:p-[6px] rounded-[36px] sm:rounded-[48px] md:rounded-[56px] bg-gold-metallic shadow-[0_35px_90px_rgba(0,0,0,0.98),0_0_60px_rgba(234,179,8,0.35)] transition-all duration-300 ${isAttract ? 'shadow-[0_0_90px_rgba(250,204,21,0.6),0_35px_90px_rgba(0,0,0,0.98)]' : ''}`}>
 
           {/* Main Royal Crimson Cabinet Body */}
-          <div className="relative w-full bg-crimson-velvet rounded-[50px] p-6 md:p-8 border-2 border-yellow-400/50 shadow-[inset_0_4px_16px_rgba(255,255,255,0.4),inset_0_-10px_20px_rgba(0,0,0,0.85)]">
+          <div className="relative w-full bg-crimson-velvet rounded-[32px] sm:rounded-[42px] md:rounded-[50px] p-3 sm:p-6 md:p-8 border-2 border-yellow-400/50 shadow-[inset_0_4px_16px_rgba(255,255,255,0.4),inset_0_-10px_20px_rgba(0,0,0,0.85)]">
 
             {/* Brass Corner Rivets */}
-            <div className="absolute top-4 left-5 w-3 h-3 rounded-full bg-gradient-to-tr from-amber-700 via-yellow-400 to-amber-200 border border-black/80 shadow-md" />
-            <div className="absolute top-4 right-5 w-3 h-3 rounded-full bg-gradient-to-tr from-amber-700 via-yellow-400 to-amber-200 border border-black/80 shadow-md" />
-            <div className="absolute bottom-4 left-5 w-3 h-3 rounded-full bg-gradient-to-tr from-amber-700 via-yellow-400 to-amber-200 border border-black/80 shadow-md" />
-            <div className="absolute bottom-4 right-5 w-3 h-3 rounded-full bg-gradient-to-tr from-amber-700 via-yellow-400 to-amber-200 border border-black/80 shadow-md" />
+            <div className="absolute top-2.5 sm:top-4 left-3 sm:left-5 w-2 sm:w-3 h-2 sm:h-3 rounded-full bg-gradient-to-tr from-amber-700 via-yellow-400 to-amber-200 border border-black/80 shadow-md" />
+            <div className="absolute top-2.5 sm:top-4 right-3 sm:right-5 w-2 sm:w-3 h-2 sm:h-3 rounded-full bg-gradient-to-tr from-amber-700 via-yellow-400 to-amber-200 border border-black/80 shadow-md" />
+            <div className="absolute bottom-2.5 sm:bottom-4 left-3 sm:left-5 w-2 sm:w-3 h-2 sm:h-3 rounded-full bg-gradient-to-tr from-amber-700 via-yellow-400 to-amber-200 border border-black/80 shadow-md" />
+            <div className="absolute bottom-2.5 sm:bottom-4 right-3 sm:right-5 w-2 sm:w-3 h-2 sm:h-3 rounded-full bg-gradient-to-tr from-amber-700 via-yellow-400 to-amber-200 border border-black/80 shadow-md" />
 
             {/* Inner Chrome Bevel highlight */}
-            <div className="absolute inset-2 border border-yellow-200/30 rounded-[44px] pointer-events-none" />
+            <div className="absolute inset-1.5 sm:inset-2 border border-yellow-200/30 rounded-[28px] sm:rounded-[38px] md:rounded-[44px] pointer-events-none" />
 
             {/* LOGO MARQUEE ARCH */}
-            <div className="absolute top-[-120px] md:top-[-145px] left-1/2 -translate-x-1/2 w-[360px] md:w-[460px] h-[140px] md:h-[165px] z-20 flex flex-col items-center justify-center pt-2 md:pt-4 select-none pointer-events-none">
+            <div className="absolute top-[-80px] sm:top-[-120px] md:top-[-145px] left-1/2 -translate-x-1/2 w-[270px] sm:w-[360px] md:w-[460px] h-[95px] sm:h-[140px] md:h-[165px] z-20 flex flex-col items-center justify-center pt-2 md:pt-4 select-none pointer-events-none">
               
               {/* Outer Arch Gold Frame */}
               <div 
-                className="absolute inset-0 p-[5px] bg-gold-metallic shadow-[0_15px_35px_rgba(0,0,0,0.95),0_0_25px_rgba(234,179,8,0.4)]"
+                className="absolute inset-0 p-[3px] sm:p-[5px] bg-gold-metallic shadow-[0_15px_35px_rgba(0,0,0,0.95),0_0_25px_rgba(234,179,8,0.4)]"
                 style={{ borderRadius: '135px 135px 0 0' }}
               >
                 {/* Inner Crimson Arch Dome */}
@@ -407,7 +407,7 @@ export const SlotMachine: React.FC = () => {
               {MARQUEE_BULBS.map((bulb, i) => (
                 <div
                   key={bulb.id}
-                  className={`absolute w-3.5 h-3.5 md:w-4 md:h-4 rounded-full z-25 ${
+                  className={`absolute w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 rounded-full z-25 ${
                     gameState === 'spinning'
                       ? (i % 2 === 0 ? 'animate-bulb-3d-fast-odd' : 'animate-bulb-3d-fast-even')
                       : (i % 2 === 0 ? 'animate-bulb-3d-odd' : 'animate-bulb-3d-even')
@@ -422,7 +422,7 @@ export const SlotMachine: React.FC = () => {
                 className="relative z-10 flex flex-col items-center justify-center cursor-pointer pointer-events-auto group"
               >
                 <h1
-                  className="font-anton text-4xl md:text-5xl tracking-[0.24em] text-white text-center select-none transform group-hover:scale-105 transition-transform"
+                  className="font-anton text-2xl sm:text-4xl md:text-5xl tracking-[0.24em] text-white text-center select-none transform group-hover:scale-105 transition-transform"
                   style={{ 
                     textShadow: '0 3px 0 #85000d, 0 6px 0 #4a0007, 0 8px 25px rgba(0,0,0,0.95), 0 0 30px rgba(250,204,21,0.5)'
                   }}
@@ -436,7 +436,7 @@ export const SlotMachine: React.FC = () => {
             {REEL_BULBS.map((bulb, i) => (
               <div
                 key={bulb.id}
-                className={`absolute w-3.5 h-3.5 md:w-4 md:h-4 rounded-full z-15 ${
+                className={`absolute w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 rounded-full z-15 ${
                   gameState === 'spinning'
                     ? (i % 2 === 0 ? 'animate-bulb-3d-fast-odd' : 'animate-bulb-3d-fast-even')
                     : (i % 2 === 0 ? 'animate-bulb-3d-odd' : 'animate-bulb-3d-even')
@@ -449,8 +449,8 @@ export const SlotMachine: React.FC = () => {
             <Lever onPull={handleSpin} disabled={!isInteractable} />
 
             {/* INNER REELS VAULT CABINET */}
-            <div className="relative bg-gradient-to-b from-[#1b080a] via-[#080203] to-[#1b080a] p-4 md:p-6 rounded-[32px] border-4 border-yellow-500/80 inset-bevel-dark shadow-[inset_0_16px_35px_rgba(0,0,0,0.98),0_10px_30px_rgba(0,0,0,0.9),0_0_25px_rgba(234,179,8,0.2)]">
-              <div className="grid grid-cols-3 gap-3 md:gap-5">
+            <div className="relative bg-gradient-to-b from-[#1b080a] via-[#080203] to-[#1b080a] p-2 sm:p-4 md:p-6 rounded-[22px] sm:rounded-[32px] border-2 sm:border-4 border-yellow-500/80 inset-bevel-dark shadow-[inset_0_16px_35px_rgba(0,0,0,0.98),0_10px_30px_rgba(0,0,0,0.9),0_0_25px_rgba(234,179,8,0.2)]">
+              <div className="grid grid-cols-3 gap-1.5 sm:gap-3 md:gap-5">
                 {[0, 1, 2].map((idx) => (
                   <Reel
                     key={idx}
@@ -464,9 +464,9 @@ export const SlotMachine: React.FC = () => {
               </div>
 
               {/* SUERTE / GIRANDO / NEAR MISS badge */}
-              <div className="absolute top-[-14px] left-1/2 -translate-x-1/2 bg-gradient-to-r from-black via-amber-950/90 to-black border-2 border-yellow-400 px-6 py-1 rounded-full z-25 shadow-[0_6px_16px_rgba(0,0,0,0.95),0_0_18px_rgba(234,179,8,0.4)] flex items-center gap-2.5">
-                <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping shadow-[0_0_10px_#ef4444]" />
-                <span className="font-orbitron text-[9px] md:text-[11px] text-yellow-300 font-black uppercase tracking-[0.3em] gold-text-glow">
+              <div className="absolute top-[-12px] sm:top-[-14px] left-1/2 -translate-x-1/2 bg-gradient-to-r from-black via-amber-950/90 to-black border sm:border-2 border-yellow-400 px-3 sm:px-6 py-0.5 sm:py-1 rounded-full z-25 shadow-[0_6px_16px_rgba(0,0,0,0.95),0_0_18px_rgba(234,179,8,0.4)] flex items-center gap-1.5 sm:gap-2.5">
+                <span className="w-2 sm:w-2.5 h-2 sm:h-2.5 rounded-full bg-red-500 animate-ping shadow-[0_0_10px_#ef4444]" />
+                <span className="font-orbitron text-[8px] sm:text-[9px] md:text-[11px] text-yellow-300 font-black uppercase tracking-[0.25em] sm:tracking-[0.3em] gold-text-glow">
                   {gameState === 'spinning'
                     ? '¡GIRANDO!'
                     : isAttract

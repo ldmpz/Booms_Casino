@@ -187,7 +187,7 @@ export const PrizeModal: React.FC<PrizeModalProps> = ({
               }
             }}
             exit={{ scale: 0.8, opacity: 0, y: 30 }}
-            className={`relative max-w-lg w-full rounded-[36px] p-8 flex flex-col items-center border-4 text-center shadow-[0_20px_80px_rgba(0,0,0,0.95)] overflow-hidden backdrop-blur-2xl bg-gradient-to-b from-black via-zinc-950 to-black z-10
+            className={`relative max-w-lg w-[92vw] sm:w-full rounded-3xl sm:rounded-[36px] p-5 sm:p-8 flex flex-col items-center border-2 sm:border-4 text-center shadow-[0_20px_80px_rgba(0,0,0,0.95)] overflow-hidden backdrop-blur-2xl bg-gradient-to-b from-black via-zinc-950 to-black z-10
               ${
                 prizeTier === 'big'
                   ? 'border-yellow-400 shadow-[0_0_50px_rgba(250,204,21,0.35)]'
@@ -211,7 +211,7 @@ export const PrizeModal: React.FC<PrizeModalProps> = ({
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring' }}
-              className={`relative w-48 h-48 rounded-full flex items-center justify-center p-4 shadow-2xl mb-8 bg-black/60 border-2
+              className={`relative w-32 h-32 sm:w-48 sm:h-48 rounded-full flex items-center justify-center p-3 sm:p-4 shadow-2xl mb-4 sm:mb-8 bg-black/60 border-2
                 ${
                   prizeTier === 'big'
                     ? 'border-yellow-400 animate-pulse-glow shadow-yellow-500/30'
@@ -231,7 +231,7 @@ export const PrizeModal: React.FC<PrizeModalProps> = ({
                   const parent = target.parentElement;
                   if (parent) {
                     const textEl = document.createElement('div');
-                    textEl.className = 'text-6xl';
+                    textEl.className = 'text-4xl sm:text-6xl';
                     textEl.innerText = prizeTier === 'big' ? '👑' : prizeTier === 'medium' ? '🔵' : '🟢';
                     parent.appendChild(textEl);
                   }
@@ -245,9 +245,9 @@ export const PrizeModal: React.FC<PrizeModalProps> = ({
                 initial={{ opacity: 0, scale: 0.7 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.15, type: 'spring', stiffness: 300 }}
-                className="mb-3 px-5 py-1.5 rounded-full bg-gradient-to-r from-yellow-900/60 to-orange-900/60 border border-yellow-500/50 shadow-[0_0_12px_rgba(250,204,21,0.3)]"
+                className="mb-2 sm:mb-3 px-4 sm:px-5 py-1 sm:py-1.5 rounded-full bg-gradient-to-r from-yellow-900/60 to-orange-900/60 border border-yellow-500/50 shadow-[0_0_12px_rgba(250,204,21,0.3)]"
               >
-                <span className="font-orbitron text-[10px] text-yellow-300 uppercase tracking-widest font-bold">
+                <span className="font-orbitron text-[9px] sm:text-[10px] text-yellow-300 uppercase tracking-widest font-bold">
                   ⚡ ¡Casi lo logras! ⚡
                 </span>
               </motion.div>
@@ -258,7 +258,7 @@ export const PrizeModal: React.FC<PrizeModalProps> = ({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className={`font-anton text-lg md:text-xl uppercase tracking-widest mb-1
+              className={`font-anton text-base sm:text-xl uppercase tracking-widest mb-1
                 ${prizeTier === 'big' ? 'text-yellow-400 text-glow-gold' : prizeTier === 'medium' ? 'text-blue-400 text-glow-blue' : 'text-green-400 text-glow-green'}
               `}
             >
@@ -270,18 +270,15 @@ export const PrizeModal: React.FC<PrizeModalProps> = ({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className={`font-anton text-4xl md:text-5xl uppercase mb-6 tracking-wider leading-none
+              className={`font-anton text-2xl sm:text-4xl md:text-5xl uppercase mb-4 sm:mb-6 tracking-wider leading-none
                 ${prizeTier === 'big' ? 'text-white text-glow-jackpot' : config.textColor}
               `}
-              style={{
-                fontSize: prizeTier === 'big' ? '3rem' : '2.25rem'
-              }}
             >
               {prizeTier === 'big' ? '¡¡PREMIO GRANDE!!' : config.subText}
             </motion.h2>
 
             {/* Gold/Silver Divider */}
-            <div className={`h-[2px] w-2/3 mb-8 bg-gradient-to-r from-transparent via-white/35 to-transparent
+            <div className={`h-[2px] w-2/3 mb-5 sm:mb-8 bg-gradient-to-r from-transparent via-white/35 to-transparent
               ${prizeTier === 'big' ? 'via-yellow-400/50' : prizeTier === 'medium' ? 'via-blue-400/30' : 'via-green-400/30'}
             `} />
 
@@ -293,7 +290,7 @@ export const PrizeModal: React.FC<PrizeModalProps> = ({
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={onClose}
-              className={`relative px-12 py-5 rounded-full font-black tracking-widest text-lg uppercase cursor-pointer transition-all duration-300 shadow-2xl overflow-hidden border-2
+              className={`relative px-8 sm:px-12 py-3.5 sm:py-5 rounded-full font-black tracking-widest text-sm sm:text-lg uppercase cursor-pointer transition-all duration-300 shadow-2xl overflow-hidden border-2
                 ${
                   prizeTier === 'big'
                     ? 'bg-gradient-to-b from-yellow-300 via-amber-500 to-yellow-600 text-black border-yellow-200 shadow-yellow-500/30 hover:brightness-110'

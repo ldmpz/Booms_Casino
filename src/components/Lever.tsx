@@ -39,7 +39,7 @@ export const Lever: React.FC<LeverProps> = ({ onPull, disabled }) => {
   };
 
   return (
-    <div className="absolute right-[-48px] top-[140px] md:top-[160px] h-[250px] w-[50px] z-30 select-none flex flex-col items-center">
+    <div className="absolute right-[-32px] sm:right-[-42px] md:right-[-48px] top-[100px] sm:top-[130px] md:top-[160px] h-[190px] sm:h-[220px] md:h-[250px] w-[36px] sm:w-[45px] md:w-[50px] z-30 select-none flex flex-col items-center">
       {/* Base mounting cup — Gold/Chrome Mechanical Socket */}
       <div
         className="absolute bottom-0 w-13 h-16 rounded-l-md border-r-2 border-yellow-400 bg-gradient-to-b from-amber-700 via-yellow-600 to-amber-950 shadow-[inset_2px_2px_4px_rgba(255,255,255,0.5),0_8px_16px_rgba(0,0,0,0.8)]"
