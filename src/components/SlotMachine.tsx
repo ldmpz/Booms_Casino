@@ -371,7 +371,7 @@ export const SlotMachine: React.FC = () => {
       </header>
 
       {/* ── SLOT MACHINE CABINET ────────────────────────────────────── */}
-      <main className="relative w-full max-w-4xl flex-1 flex flex-col items-center justify-center z-10 py-2 sm:py-4 md:py-8">
+      <main className="relative w-full max-w-4xl flex-1 flex flex-col items-center justify-center z-10 py-2 sm:py-4 md:py-8 pr-10 sm:pr-14 md:pr-16 pl-2 sm:pl-4 md:pl-6">
 
         {/* Outer Gold & Platinum 3D Chassis Border */}
         <div className={`relative w-full p-1 sm:p-1.5 md:p-[6px] rounded-[36px] sm:rounded-[48px] md:rounded-[56px] bg-gold-metallic shadow-[0_35px_90px_rgba(0,0,0,0.98),0_0_60px_rgba(234,179,8,0.35)] transition-all duration-300 ${isAttract ? 'shadow-[0_0_90px_rgba(250,204,21,0.6),0_35px_90px_rgba(0,0,0,0.98)]' : ''}`}>
@@ -389,7 +389,7 @@ export const SlotMachine: React.FC = () => {
             <div className="absolute inset-1.5 sm:inset-2 border border-yellow-200/30 rounded-[28px] sm:rounded-[38px] md:rounded-[44px] pointer-events-none" />
 
             {/* LOGO MARQUEE ARCH */}
-            <div className="absolute top-[-80px] sm:top-[-120px] md:top-[-145px] left-1/2 -translate-x-1/2 w-[270px] sm:w-[360px] md:w-[460px] h-[95px] sm:h-[140px] md:h-[165px] z-20 flex flex-col items-center justify-center pt-2 md:pt-4 select-none pointer-events-none">
+            <div className="absolute top-[-75px] sm:top-[-115px] md:top-[-145px] left-1/2 -translate-x-1/2 w-[240px] sm:w-[350px] md:w-[460px] h-[85px] sm:h-[135px] md:h-[165px] z-20 flex flex-col items-center justify-center pt-2 md:pt-4 select-none pointer-events-none">
               
               {/* Outer Arch Gold Frame */}
               <div 
@@ -422,7 +422,7 @@ export const SlotMachine: React.FC = () => {
                 className="relative z-10 flex flex-col items-center justify-center cursor-pointer pointer-events-auto group"
               >
                 <h1
-                  className="font-anton text-2xl sm:text-4xl md:text-5xl tracking-[0.24em] text-white text-center select-none transform group-hover:scale-105 transition-transform"
+                  className="font-anton text-xl sm:text-4xl md:text-5xl tracking-[0.24em] text-white text-center select-none transform group-hover:scale-105 transition-transform"
                   style={{ 
                     textShadow: '0 3px 0 #85000d, 0 6px 0 #4a0007, 0 8px 25px rgba(0,0,0,0.95), 0 0 30px rgba(250,204,21,0.5)'
                   }}

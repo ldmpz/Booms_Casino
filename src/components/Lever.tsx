@@ -76,7 +76,7 @@ export const Lever: React.FC<LeverProps> = ({ onPull, disabled }) => {
         {/* Shiny Red Ruby Sphere Knob with Gold Collar Ring */}
         <div className="relative flex flex-col items-center">
           <div
-            className="w-12 h-12 rounded-full relative shadow-[0_8px_16px_rgba(0,0,0,0.8),0_0_15px_rgba(255,30,30,0.4),inset_-5px_-5px_10px_rgba(0,0,0,0.6)] transition-all duration-300 active:scale-95 border-2 border-yellow-400/90"
+            className="w-9 h-9 sm:w-11 sm:h-11 md:w-12 md:h-12 rounded-full relative shadow-[0_8px_16px_rgba(0,0,0,0.8),0_0_15px_rgba(255,30,30,0.4),inset_-5px_-5px_10px_rgba(0,0,0,0.6)] transition-all duration-300 active:scale-95 border-2 border-yellow-400/90"
             style={{
               background: disabled
                 ? 'radial-gradient(circle at 35% 35%, #cc5555 0%, #aa1111 30%, #6a0004 80%, #3a0002 100%)'
