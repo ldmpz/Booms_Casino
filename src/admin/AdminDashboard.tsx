@@ -27,7 +27,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ isOpen, onClose 
     if (isOpen) {
       setConfig(prizeEngine.getConfig());
     }
-  }, [isOpen]);
+  }, [isOpen, prizeEngine]);
 
   if (!isOpen) return null;
 

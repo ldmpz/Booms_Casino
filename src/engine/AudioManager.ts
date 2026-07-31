@@ -7,6 +7,13 @@ export class AudioManager {
   private isSpinningSynth: boolean = false;
   private spinInterval: ReturnType<typeof setInterval> | null = null;
 
+  // HTML5 Audio elements
+  private bgAudio: HTMLAudioElement | null = null;
+  private winAudio: HTMLAudioElement | null = null;
+
+  // Control de estado
+  private bgStarted: boolean = false;
+
   private constructor() {
     try {
       const saved = localStorage.getItem('booms_casino_muted');
@@ -14,6 +21,21 @@ export class AudioManager {
     } catch (e) {
       console.error(e);
     }
+    this.initAudioElements();
+  }
+
+  private initAudioElements(): void {
+    if (typeof window === 'undefined') return;
+
+    // 1. Musica de Fondo ambiental constante (/Audio/Ganador.mp3)
+    this.bgAudio = new Audio('/Audio/Ganador.mp3');
+    this.bgAudio.loop = true;
+    this.bgAudio.volume = 0.5;
+
+    // 2. Musica de Ganador en victoria (/Audio/Fondo.mp3)
+    this.winAudio = new Audio('/Audio/Fondo.mp3');
+    this.winAudio.loop = true;
+    this.winAudio.volume = 0.85;
   }
 
   public static getInstance(): AudioManager {
@@ -34,11 +56,96 @@ export class AudioManager {
     } catch (e) {
       console.error(e);
     }
+
     if (this.muted) {
-      this.stopSpin();
+      this.stopAllAudio();
+    } else {
+      this.startBackground();
     }
     return this.muted;
   }
+
+  /** Detiene absolutamente todos los audios en reproducción */
+  public stopAllAudio(): void {
+    this.stopSpin();
+    if (this.bgAudio) {
+      this.bgAudio.pause();
+    }
+    if (this.winAudio) {
+      this.winAudio.pause();
+      this.winAudio.currentTime = 0;
+    }
+  }
+
+  // ── Background Music ─────────────────────────────────────────────────────────
+
+  /** Reproduce la música de fondo al volumen normal (0.5) */
+  public startBackground(): void {
+    if (this.muted || !this.bgAudio) return;
+
+    if (this.winAudio && !this.winAudio.paused) return;
+
+    if (this.winAudio) {
+      this.winAudio.pause();
+      this.winAudio.currentTime = 0;
+    }
+
+    this.bgAudio.volume = 0.5;
+    if (this.bgStarted && !this.bgAudio.paused) return;
+
+    this.bgStarted = true;
+    this.bgAudio.play().catch(() => {
+      this.bgStarted = false;
+    });
+  }
+
+  public pauseBackground(): void {
+    if (this.bgAudio) {
+      this.bgAudio.pause();
+    }
+  }
+
+  public resumeBackground(): void {
+    if (this.muted || !this.bgStarted) return;
+    this.startBackground();
+  }
+
+  public stopBackground(): void {
+    if (this.bgAudio) {
+      this.bgAudio.pause();
+      this.bgAudio.currentTime = 0;
+    }
+    this.bgStarted = false;
+  }
+
+  // ── Winner Music ─────────────────────────────────────────────────────────────
+
+  /** Se ejecuta ÚNICAMENTE al mostrar la pantalla de victoria */
+  public playWin(tier: PrizeTier | null): void {
+    if (this.muted || !tier || !this.winAudio) return;
+
+    // 1. Pausar COMPLETAMENTE la música de fondo para que no se mezcle
+    this.pauseBackground();
+
+    // 2. Reproducir únicamente la música de ganador en bucle continuo
+    this.winAudio.pause();
+    this.winAudio.currentTime = 0;
+    this.winAudio.play().catch((err) => {
+      console.warn('Error al reproducir audio de ganador:', err);
+      this.startBackground();
+    });
+  }
+
+  /** Detiene la música de ganador (al presionar Reclamar Premio) y vuelve a la música de fondo */
+  public stopWinnerAudio(): void {
+    if (this.winAudio) {
+      this.winAudio.pause();
+      this.winAudio.currentTime = 0;
+    }
+    this.startBackground();
+  }
+
+  // ── Web Audio Synth FX & Volume Ducking ──────────────────────────────────────
 
   private getAudioContext(): AudioContext | null {
     if (typeof window === 'undefined') return null;
@@ -53,15 +160,21 @@ export class AudioManager {
     return this.audioCtx;
   }
 
+  /** Al tirar de la palanca: atenia la música de fondo y activa el traqueteo de la máquina */
   public playSpin(): void {
     if (this.muted) return;
+
+    // Atenuar música de fondo a 0.15 para que resalten los efectos mecánicos
+    if (this.bgAudio && !this.bgAudio.paused) {
+      this.bgAudio.volume = 0.15;
+    }
+
     const ctx = this.getAudioContext();
     if (!ctx) return;
 
     if (this.isSpinningSynth) return;
     this.isSpinningSynth = true;
 
-    // Rapid mechanical reel ratchet sound (tik-tik-tik-tik)
     let tickCount = 0;
     this.spinInterval = setInterval(() => {
       if (!this.isSpinningSynth || this.muted) {
@@ -72,7 +185,6 @@ export class AudioManager {
       tickCount++;
       const now = ctx.currentTime;
 
-      // Mechanical ratchet tick
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       const filter = ctx.createBiquadFilter();
@@ -91,11 +203,9 @@ export class AudioManager {
       osc.connect(filter);
       filter.connect(gain);
       gain.connect(ctx.destination);
-
       osc.start(now);
       osc.stop(now + 0.06);
 
-      // Subtle mechanical motor hum
       const humOsc = ctx.createOscillator();
       const humGain = ctx.createGain();
       humOsc.type = 'sine';
@@ -106,7 +216,6 @@ export class AudioManager {
       humGain.connect(ctx.destination);
       humOsc.start(now);
       humOsc.stop(now + 0.06);
-
     }, 70);
   }
 
@@ -118,6 +227,7 @@ export class AudioManager {
     }
   }
 
+  /** Golpe mecánico al detener cada tarjeta / rodillo */
   public playReelStop(): void {
     if (this.muted) return;
     const ctx = this.getAudioContext();
@@ -125,31 +235,25 @@ export class AudioManager {
 
     const now = ctx.currentTime;
 
-    // Heavy mechanical latch thud
     const thud = ctx.createOscillator();
     const thudGain = ctx.createGain();
     thud.type = 'sine';
     thud.frequency.setValueAtTime(180, now);
     thud.frequency.exponentialRampToValueAtTime(35, now + 0.12);
-
     thudGain.gain.setValueAtTime(0.45, now);
     thudGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-
     thud.connect(thudGain);
     thudGain.connect(ctx.destination);
     thud.start(now);
     thud.stop(now + 0.13);
 
-    // Metallic click layer
     const click = ctx.createOscillator();
     const clickGain = ctx.createGain();
     click.type = 'square';
     click.frequency.setValueAtTime(650, now);
     click.frequency.exponentialRampToValueAtTime(120, now + 0.04);
-
     clickGain.gain.setValueAtTime(0.25, now);
     clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
-
     click.connect(clickGain);
     clickGain.connect(ctx.destination);
     click.start(now);
@@ -167,80 +271,23 @@ export class AudioManager {
     osc.type = 'sine';
     osc.frequency.setValueAtTime(650, now);
     osc.frequency.exponentialRampToValueAtTime(250, now + 0.08);
-
     gain.gain.setValueAtTime(0.35, now);
     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-
     osc.connect(gain);
     gain.connect(ctx.destination);
     osc.start(now);
     osc.stop(now + 0.08);
   }
 
-  public playWin(tier: PrizeTier | null): void {
-    if (this.muted) return;
-    const ctx = this.getAudioContext();
-    if (!ctx) return;
-
-    const now = ctx.currentTime;
-
-    if (tier === 'small') {
-      const notes = [523.25, 659.25, 783.99, 1046.5];
-      notes.forEach((freq, idx) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, now + idx * 0.08);
-        gain.gain.setValueAtTime(0, now + idx * 0.08);
-        gain.gain.linearRampToValueAtTime(0.35, now + idx * 0.08 + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.25);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now + idx * 0.08);
-        osc.stop(now + idx * 0.08 + 0.28);
-      });
-    } else if (tier === 'medium') {
-      const notes = [440, 554.37, 659.25, 880, 1108.73, 1318.51];
-      notes.forEach((freq, idx) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(freq, now + idx * 0.07);
-        gain.gain.setValueAtTime(0, now + idx * 0.07);
-        gain.gain.linearRampToValueAtTime(0.35, now + idx * 0.07 + 0.02);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.3);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now + idx * 0.07);
-        osc.stop(now + idx * 0.07 + 0.32);
-      });
-    } else if (tier === 'big') {
-      const duration = 3.0;
-      const freqs = [523.25, 659.25, 783.99, 1046.5, 1318.51, 1567.98, 2093.0];
-      for (let t = 0; t < duration; t += 0.05) {
-        const nIdx = Math.floor((t / 0.05) % freqs.length);
-        const f = freqs[nIdx];
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = 'square';
-        osc.frequency.setValueAtTime(f, now + t);
-
-        gain.gain.setValueAtTime(0, now + t);
-        gain.gain.linearRampToValueAtTime(0.22, now + t + 0.01);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + t + 0.07);
-
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(now + t);
-        osc.stop(now + t + 0.08);
-      }
-    }
-  }
-
+  /** Al perder: se restaura el volumen normal de la música de fondo */
   public playLose(): void {
     if (this.muted) return;
+
+    // Restablecer el volumen de la música de fondo a 0.5
+    if (this.bgAudio) {
+      this.bgAudio.volume = 0.5;
+    }
+
     const ctx = this.getAudioContext();
     if (!ctx) return;
 
@@ -253,7 +300,6 @@ export class AudioManager {
       osc.frequency.setValueAtTime(freq, now + idx * 0.1);
       gain.gain.setValueAtTime(0.2, now + idx * 0.1);
       gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.1 + 0.12);
-
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start(now + idx * 0.1);

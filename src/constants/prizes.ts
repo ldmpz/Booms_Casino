@@ -2,7 +2,9 @@ import type { EventConfig, InventoryState, PrizeConfig, PrizeTier } from '../typ
 
 export type { PrizeTier, PrizeConfig, InventoryState, EventConfig };
 
-export const CASINO_BG_IMAGE = '/images/casino_bg.png';
+const publicAssetPath = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`;
+
+export const CASINO_BG_IMAGE = publicAssetPath('images/casino_bg.png');
 
 export const DEFAULT_INVENTORY: InventoryState = {
   small: 500,
@@ -62,17 +64,17 @@ export const PRIZE_TIERS: Record<PrizeTier, PrizeConfig> = {
 // Official 7 prize images stored as optimized public web assets
 export const PRIZE_IMAGES = {
   small: [
-    '/images/prizes/small1.png',
-    '/images/prizes/small2.png',
-    '/images/prizes/small3.png',
+    publicAssetPath('images/prizes/small1.png'),
+    publicAssetPath('images/prizes/small2.png'),
+    publicAssetPath('images/prizes/small3.png'),
   ],
   medium: [
-    '/images/prizes/medium1.png',
-    '/images/prizes/medium2.png',
-    '/images/prizes/medium3.png',
+    publicAssetPath('images/prizes/medium1.png'),
+    publicAssetPath('images/prizes/medium2.png'),
+    publicAssetPath('images/prizes/medium3.png'),
   ],
   big: [
-    '/images/prizes/grand.png',
+    publicAssetPath('images/prizes/grand.png'),
   ],
 };
 

@@ -6,16 +6,18 @@ interface ReelProps {
   targetImage: string | null;
   isSpinning: boolean;
   stopTriggered: boolean;
+  isLast?: boolean;
   onStop: () => void;
 }
 
-const REPEATS = 25;
+const REPEATS = 35;
 
 export const Reel: React.FC<ReelProps> = ({
   id,
   targetImage,
   isSpinning,
   stopTriggered,
+  isLast = false,
   onStop,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -57,16 +59,16 @@ export const Reel: React.FC<ReelProps> = ({
 
   const maxSpinDurationPx = useCallback(() => {
     const baseSpeed = 38 + id * 5;
-    return baseSpeed * 25;
-  }, [id]);
+    return baseSpeed * (isLast ? 22 : 18);
+  }, [id, isLast]);
 
   useEffect(() => {
     let animationFrameId: number;
 
     const maxSpeed = 38 + id * 5;
     const acceleration = 1.2;
-    const springK = 0.08;
-    const damping = 0.22;
+    const springK = isLast ? 0.045 : 0.08;
+    const damping = isLast ? 0.18 : 0.22;
 
     const updatePhysics = () => {
       const state = stateRef.current;
@@ -89,15 +91,28 @@ export const Reel: React.FC<ReelProps> = ({
           state.y = state.y % maxTrackHeight;
         }
       } else if (state.phase === 'stopping') {
-        const dist = state.y - state.targetY;
-        const springForce = -springK * dist;
-        const dampingForce = -damping * state.vy;
-        const accel = springForce + dampingForce;
+        const dist = state.y - state.targetY; // dist es negativo mientras no llega a targetY
 
-        state.vy += accel;
-        state.y += state.vy;
+        if (isLast && dist < -itemHeight * 0.4) {
+          // Desaceleración fluida de suspenso ágil (creep speed de 6.5px por frame)
+          const targetCreepSpeed = 6.5;
+          if (state.vy > targetCreepSpeed) {
+            state.vy = Math.max(targetCreepSpeed, state.vy * 0.88);
+          } else {
+            state.vy = targetCreepSpeed;
+          }
+          state.y += state.vy;
+        } else {
+          // Frenado de precisión al acercarse a la tarjeta destino
+          const springForce = -springK * dist;
+          const dampingForce = -damping * state.vy;
+          const accel = springForce + dampingForce;
 
-        if (Math.abs(dist) < 0.1 && Math.abs(state.vy) < 0.05) {
+          state.vy += accel;
+          state.y += state.vy;
+        }
+
+        if (Math.abs(dist) < 0.15 && Math.abs(state.vy) < 0.06) {
           state.y = state.targetY;
           state.vy = 0;
           state.phase = 'stopped';

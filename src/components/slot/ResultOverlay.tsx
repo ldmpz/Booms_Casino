@@ -84,7 +84,7 @@ export const ResultOverlay: React.FC<ResultOverlayProps> = ({
         }
       }
     }
-  }, [isOpen, outcome, prizeTier]);
+  }, [isOpen, outcome, prizeTier, audioManager]);
 
   if (!isOpen || !outcome) return null;
 

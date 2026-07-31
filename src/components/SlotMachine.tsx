@@ -42,6 +42,7 @@ export const SlotMachine: React.FC = () => {
   const [currentResult, setCurrentResult] = useState<CalculatedOutcome | null>(null);
   const [muted, setMuted] = useState(audioManager.isMuted());
 
+  const [stopOrder, setStopOrder] = useState<number[]>([0, 1, 2]);
   const [reelsSpinning, setReelsSpinning] = useState([false, false, false]);
   const [reelsStopTriggered, setReelsStopTriggered] = useState([false, false, false]);
   const [reelsStopped, setReelsStopped] = useState([false, false, false]);
@@ -93,11 +94,13 @@ export const SlotMachine: React.FC = () => {
   const handleToggleMute = () => {
     const isNowMuted = audioManager.toggleMute();
     setMuted(isNowMuted);
+    // toggleMute already calls stopBackground/resumeBackground internally
   };
 
   const handleSpin = () => {
     if (gameState !== 'idle') return;
     audioManager.playButtonClick();
+    audioManager.startBackground();
     setIsAttract(false);
 
     const result = gameEngine.playTurn();
@@ -113,13 +116,42 @@ export const SlotMachine: React.FC = () => {
 
     audioManager.playSpin();
 
-    const baseDelay = 2500;
-    const isSuspense = result.outcome === 'WIN_BIG' || result.isNearMiss;
-    const reel3Delay = isSuspense ? 4500 : 3300;
+    // Aleatorizar el orden en que se detienen los rodillos/tarjetas (p. ej. [1, 2, 0], [2, 0, 1])
+    const shuffledOrder = [0, 1, 2].sort(() => Math.random() - 0.5);
+    setStopOrder(shuffledOrder);
 
-    setTimeout(() => setReelsStopTriggered((prev) => [true, prev[1], prev[2]]), baseDelay);
-    setTimeout(() => setReelsStopTriggered((prev) => [prev[0], true, prev[2]]), baseDelay + 400);
-    setTimeout(() => setReelsStopTriggered((prev) => [prev[0], prev[1], true]), reel3Delay);
+    const r0 = shuffledOrder[0];
+    const r1 = shuffledOrder[1];
+    const r2 = shuffledOrder[2];
+
+    const baseDelay = 1600;
+    const secondDelay = baseDelay + 600;
+    const isSuspense = result.outcome === 'WIN_BIG' || result.isNearMiss;
+    const lastDelay = secondDelay + (isSuspense ? 1100 : 700);
+
+    setTimeout(() => {
+      setReelsStopTriggered((prev) => {
+        const next = [...prev];
+        next[r0] = true;
+        return next;
+      });
+    }, baseDelay);
+
+    setTimeout(() => {
+      setReelsStopTriggered((prev) => {
+        const next = [...prev];
+        next[r1] = true;
+        return next;
+      });
+    }, secondDelay);
+
+    setTimeout(() => {
+      setReelsStopTriggered((prev) => {
+        const next = [...prev];
+        next[r2] = true;
+        return next;
+      });
+    }, lastDelay);
   };
 
   const handleReelStop = useCallback(
@@ -178,6 +210,7 @@ export const SlotMachine: React.FC = () => {
   }, [reelsStopped, gameState, currentResult, audioManager]);
 
   const handleCloseOverlay = () => {
+    audioManager.stopWinnerAudio();
     setShowResultOverlay(false);
     setGameState('idle');
     setGlowState('idle');
@@ -362,6 +395,7 @@ export const SlotMachine: React.FC = () => {
                     targetImage={currentResult ? currentResult.reelsOutcome[idx] : null}
                     isSpinning={reelsSpinning[idx]}
                     stopTriggered={reelsStopTriggered[idx]}
+                    isLast={stopOrder[2] === idx}
                     onStop={() => handleReelStop(idx)}
                   />
                 ))}
